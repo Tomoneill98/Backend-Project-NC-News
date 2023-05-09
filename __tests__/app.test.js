@@ -31,7 +31,7 @@ describe("GET - Status: 200 - Responds with an array of topic objects with slug 
         // .toMatchObject
       });
   });
-  it("status: 404, responds with an erorr message when passed a non existent path", () => {
+  it("Responds with an erorr message when passed a non existent path", () => {
     return request(app)
       .get("/api/nothing")
       .expect(404)
