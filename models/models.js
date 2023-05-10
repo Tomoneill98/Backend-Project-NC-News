@@ -8,12 +8,7 @@ exports.fetchTopicsData = () => {
 };
 
 exports.fetchAPIsData = () => {
-  return fs
-    .readFile("endpoints.json", "utf-8")
-    .then((result) => {
-      return JSON.parse(result);
-    })
-    .then((fileParsed) => {
-      return fileParsed;
-    });
+  return fs.readFile("endpoints.json", "utf-8").then((result) => {
+    return JSON.parse(result);
+  });
 };

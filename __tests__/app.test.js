@@ -44,41 +44,16 @@ describe("GET - Status: 200 - Responds with an array of topic objects with slug 
 
 describe("GET - /api", () => {
   it("200 - Responds with a JSON file of all api endpoints ", () => {
-    const apis = {
-      "GET /api": {
-        description:
-          "serves up a json representation of all the available endpoints of the api",
-      },
-      "GET /api/topics": {
-        description: "serves an array of all topics",
-        queries: [],
-        exampleResponse: {
-          topics: [{ slug: "football", description: "Footie!" }],
-        },
-      },
-      "GET /api/articles": {
-        description: "serves an array of all topics",
-        queries: ["author", "topic", "sort_by", "order"],
-        exampleResponse: {
-          articles: [
-            {
-              title: "Seafood substitutions are increasing",
-              topic: "cooking",
-              author: "weegembump",
-              body: "Text from the article..",
-              created_at: "2018-05-30T15:59:13.341Z",
-              votes: 0,
-              comment_count: 6,
-            },
-          ],
-        },
-      },
-    };
     return request(app)
       .get("/api")
       .expect(200)
       .then((response) => {
-        expect(response.body).toEqual(apis);
+        console.log(response.body);
+        expect(response.body).toEqual(endpoints);
+        expect(typeof response.body).toBe("object");
+        expect(response.body).toHaveProperty("GET /api/articles");
+        expect(response.body).toHaveProperty("GET /api/topics");
+        expect(response.body).toHaveProperty("GET /api");
       });
   });
 });
