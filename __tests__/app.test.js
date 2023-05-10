@@ -75,7 +75,7 @@ describe("GET - /api/articles/:article_id", () => {
 });
 
 describe("GET - /api/articles/invalidArticleId", () => {
-  it("404 - responds with error message when invalid path given", () => {
+  it("400 - responds with error message when invalid path given", () => {
     return request(app)
       .get("/api/articles/invalidArticleId")
       .expect(400)
@@ -83,7 +83,7 @@ describe("GET - /api/articles/invalidArticleId", () => {
         expect(response.body).toEqual({ msg: "Error - Invalid ID" });
       });
   });
-  it("400 - responds with error message when id not found", () => {
+  it("404 - responds with error message when id not found", () => {
     return request(app)
       .get("/api/articles/1000000000")
       .expect(404)
