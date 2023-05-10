@@ -58,7 +58,6 @@ describe("GET - /api/articles/:article_id", () => {
       .get("/api/articles/1")
       .expect(200)
       .then((response) => {
-        console.log(response.body);
         expect(response.body.article).toEqual(
           expect.objectContaining({
             article_id: 1,

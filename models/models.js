@@ -14,7 +14,6 @@ exports.fetchAPIsData = () => {
 };
 
 exports.fetchArticlesById = (article_id) => {
-  console.log("in model");
   return connection
     .query(`SELECT * FROM articles WHERE article_id = $1;`, [article_id])
     .then((result) => {
