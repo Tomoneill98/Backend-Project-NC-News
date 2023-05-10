@@ -1,17 +1,16 @@
-const app = require("../app"); // require in the app file so we can run tests on it
-const request = require("supertest"); // require in supertest with the keyword 'request'
+const app = require("../app");
+const request = require("supertest");
 const connection = require("../db/connection");
 const testData = require("../db/data/test-data/index");
 const seed = require("../db/seeds/seed");
 const endpoints = require("../endpoints.json");
+const sorted = require("jest-sorted");
 
 beforeEach(() => {
-  // re-seed the database before each test
   return seed(testData);
 });
 
 afterAll(() => {
-  // un seeds at very end
   return connection.end();
 });
 
@@ -28,8 +27,6 @@ describe("GET - Status: 200 - Responds with an array of topic objects with slug 
           expect(typeof topic).toBe("object");
         });
         expect(Array.isArray(result.body)).toEqual(true);
-        // .objectContaining - allow object to be extended with extra props
-        // .toMatchObject
       });
   });
   it("Responds with an error message when passed a non existent path", () => {
@@ -84,6 +81,35 @@ describe("GET - /api/articles", () => {
             })
           );
         });
+      });
+  });
+  it("200 - should return an array ", () => {
+    return request(app)
+      .get("/api/articles")
+      .expect(200)
+      .then((response) => {
+        expect(Array.isArray(response.body.articles)).toBe(true);
+      });
+  });
+  it("200 - should return the articles sorted in descending order ", () => {
+    return request(app)
+      .get("/api/articles")
+      .expect(200)
+      .then((response) => {
+        expect(response.body.articles).toBeSortedBy("created_at", {
+          descending: true,
+        });
+      });
+  });
+});
+
+describe("error handling - GET - /api/articles", () => {
+  it("404: responds with an error message when passed wrong path ", () => {
+    return request(app)
+      .get("/api/artacles")
+      .expect(404)
+      .then((response) => {
+        expect(response.body.msg).toEqual("Error - invalid endpoint");
       });
   });
 });
