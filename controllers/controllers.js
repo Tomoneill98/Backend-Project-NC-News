@@ -1,5 +1,4 @@
-const { fetchTopicsData } = require("../models/models");
-const { fetchAPIsData } = require("../models/models");
+const { fetchTopicsData, fetchAPIsData } = require("../models/models");
 
 exports.getTopics = (req, res) => {
   fetchTopicsData()
