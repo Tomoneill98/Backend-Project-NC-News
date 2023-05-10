@@ -48,12 +48,42 @@ describe("GET - /api", () => {
       .get("/api")
       .expect(200)
       .then((response) => {
-        console.log(response.body);
         expect(response.body).toEqual(endpoints);
         expect(typeof response.body).toBe("object");
         expect(response.body).toHaveProperty("GET /api/articles");
         expect(response.body).toHaveProperty("GET /api/topics");
         expect(response.body).toHaveProperty("GET /api");
+      });
+  });
+});
+
+// task 5
+
+describe("GET - /api/articles", () => {
+  it("200 - responds with an array of article objects ", () => {
+    return request(app)
+      .get("/api/articles")
+      .expect(200)
+      .then((response) => {
+        // expect(response.body.articles[0]).toHaveProperty("author");
+        expect(response.body.articles.length).toBe(12);
+        response.body.articles.forEach((article) => {
+          expect(article).toEqual(
+            expect.objectContaining({
+              article_id: expect.any(Number),
+              title: expect.any(String),
+              topic: expect.any(String),
+              author: expect.any(String),
+              created_at: expect.any(String),
+              votes: expect.any(Number),
+              article_img_url: expect.any(String),
+              comment_count: expect.any(String),
+            }),
+            expect.not.objectContaining({
+              body: expect.any(String),
+            })
+          );
+        });
       });
   });
 });
