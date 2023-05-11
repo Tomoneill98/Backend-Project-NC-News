@@ -4,7 +4,9 @@ const app = express();
 const {
   getTopics,
   getAPIs,
+  getArticles,
   getArticlesById,
+
 } = require("./controllers/controllers");
 
 app.use(express.json());
@@ -13,7 +15,9 @@ app.get("/api/topics", getTopics);
 
 app.get("/api", getAPIs);
 
+app.get("/api/articles", getArticles);
 app.get("/api/articles/:article_id", getArticlesById);
+
 
 app.all("*", (req, res) => {
   res.status(404).send({ msg: "Error - invalid endpoint" });
