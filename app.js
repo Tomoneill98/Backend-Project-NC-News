@@ -4,6 +4,8 @@ const app = express();
 const {
   getTopics,
   getAPIs,
+
+  getCommentsById,
   getArticles,
   getArticlesById,
 
@@ -15,8 +17,14 @@ app.get("/api/topics", getTopics);
 
 app.get("/api", getAPIs);
 
+
+// task 6
+
+app.get("/api/articles/:article_id/comments", getCommentsById);
+
 app.get("/api/articles", getArticles);
 app.get("/api/articles/:article_id", getArticlesById);
+
 
 
 app.all("*", (req, res) => {

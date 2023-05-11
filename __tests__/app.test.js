@@ -154,3 +154,50 @@ describe("error handling - GET - /api/articles", () => {
       });
   });
 });
+
+describe("GET - /api/articles/:article_id/comments", () => {
+  it("200 - Responds with an array of comments for given article id ", () => {
+    return request(app)
+      .get("/api/articles/9/comments")
+      .expect(200)
+      .then((response) => {
+        console.log(response.body);
+        console.log(response.body.comments);
+        expect(Array.isArray(response.body.comments)).toBe(true);
+        expect(response.body.comments.length).toBe(2);
+        response.body.comments.forEach((comment) => {
+          expect(comment).toEqual(
+            expect.objectContaining({
+              comment_id: expect.any(Number),
+              body: expect.any(String),
+              votes: expect.any(Number),
+              author: expect.any(String),
+              article_id: expect.any(Number),
+              created_at: expect.any(String),
+            })
+          );
+        });
+      });
+  });
+  it("200 - Responds with the array of comments ordered by recent comments first", () => {
+    return request(app)
+      .get("/api/articles/9/comments")
+      .expect(200)
+      .then((response) => {
+        expect(response.body.comments).toBeSortedBy("created_at", {
+          descending: true,
+        });
+      });
+  });
+});
+
+// describe("Error handling - /api/articles/:article_id/comments", () => {
+//   it("404 - responds with error message when passed with invalid id", () => {
+//     return request(app)
+//       .get("/api/articles/1000000/comments")
+//       .expect(404)
+//       .then((response) => {
+//         expect(response.body.msg).toBe("Error - invalid endpoint");
+//       });
+//   });
+// });
