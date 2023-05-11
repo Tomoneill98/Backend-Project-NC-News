@@ -21,7 +21,6 @@ exports.fetchCommentsById = (article_id) => {
       [article_id]
     )
     .then((result) => {
-      console.log(result.rows);
-      return result.rows;
+      if (result.rows) return result.rows;
     });
 };
