@@ -207,7 +207,7 @@ describe("Error handling - /api/articles/:article_id/comments", () => {
         expect(res.body.msg).toBe("Error - Invalid ID");
       });
   });
-  it("GET - look for an article with no comments - Returns a message saying that", () => {
+  it("GET - look for an article with no comments - Returns an empty array", () => {
     return request(app)
       .get("/api/articles/2/comments")
       .expect(200)
