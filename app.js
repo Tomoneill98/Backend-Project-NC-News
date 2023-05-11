@@ -8,24 +8,15 @@ const {
   getCommentsById,
   getArticles,
   getArticlesById,
-
 } = require("./controllers/controllers");
 
 app.use(express.json());
 
 app.get("/api/topics", getTopics);
-
 app.get("/api", getAPIs);
-
-
-// task 6
-
-app.get("/api/articles/:article_id/comments", getCommentsById);
-
 app.get("/api/articles", getArticles);
 app.get("/api/articles/:article_id", getArticlesById);
-
-
+app.get("/api/articles/:article_id/comments", getCommentsById);
 
 app.all("*", (req, res) => {
   res.status(404).send({ msg: "Error - invalid endpoint" });
