@@ -29,7 +29,6 @@ describe("GET - Status: 200 - Responds with an array of topic objects with slug 
         expect(Array.isArray(response.body.topics)).toEqual(true);
         // .objectContaining - allow object to be extended with extra props
         // .toMatchObject
-
       });
   });
   it("Responds with an error message when passed a non existent path", () => {
@@ -90,7 +89,6 @@ describe("GET - /api/articles/invalidArticleId", () => {
       .expect(404)
       .then((response) => {
         expect(response.body).toEqual({ msg: "Error - invalid article ID" });
-
       });
   });
 });
@@ -191,13 +189,30 @@ describe("GET - /api/articles/:article_id/comments", () => {
   });
 });
 
-// describe("Error handling - /api/articles/:article_id/comments", () => {
-//   it("404 - responds with error message when passed with invalid id", () => {
-//     return request(app)
-//       .get("/api/articles/1000000/comments")
-//       .expect(404)
-//       .then((response) => {
-//         expect(response.body.msg).toBe("Error - invalid endpoint");
-//       });
-//   });
-// });
+describe("Error handling - /api/articles/:article_id/comments", () => {
+  it("404 - responds with error message when passed with invalid id", () => {
+    return request(app)
+      .get("/api/articles/1000000/comments")
+      .expect(404)
+      .then((response) => {
+        console.log(response.body);
+        expect(response.body.msg).toBe("Error - article doesn't exist");
+      });
+  });
+  it("GET - look for nonsense - Returns an error", () => {
+    return request(app)
+      .get("/api/articles/nonsense/comments")
+      .expect(400)
+      .then((res) => {
+        expect(res.body.msg).toBe("Error - Invalid ID");
+      });
+  });
+  it("GET - look for an article with no comments - Returns an empty array", () => {
+    return request(app)
+      .get("/api/articles/2/comments")
+      .expect(200)
+      .then((res) => {
+        expect(res.body.comments).toEqual([]);
+      });
+  });
+});
