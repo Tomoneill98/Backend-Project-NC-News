@@ -5,7 +5,7 @@ const {
   fetchCommentsById,
   fetchArticles,
   fetchArticlesById,
-
+  insertComment,
 } = require("../models/models");
 
 exports.getTopics = (req, res) => {
@@ -53,4 +53,18 @@ exports.getCommentsById = (req, res, next) => {
       res.status(200).send({ comments });
     })
     .catch(next);
+};
+
+// task 7
+
+exports.postComment = (req, res, next) => {
+  const newComment = req.body;
+  console.log(newComment);
+  const { article_id } = req.params;
+  console.log(article_id);
+  console.log("in controller");
+  insertComment(newComment, article_id).then((comment) => {
+    console.log(comment);
+    res.status(201).send({ comment });
+  });
 };

@@ -159,8 +159,6 @@ describe("GET - /api/articles/:article_id/comments", () => {
       .get("/api/articles/9/comments")
       .expect(200)
       .then((response) => {
-        console.log(response.body);
-        console.log(response.body.comments);
         expect(Array.isArray(response.body.comments)).toBe(true);
         expect(response.body.comments.length).toBe(2);
         response.body.comments.forEach((comment) => {
@@ -195,7 +193,6 @@ describe("Error handling - /api/articles/:article_id/comments", () => {
       .get("/api/articles/1000000/comments")
       .expect(404)
       .then((response) => {
-        console.log(response.body);
         expect(response.body.msg).toBe("Error - article doesn't exist");
       });
   });
@@ -216,3 +213,29 @@ describe("Error handling - /api/articles/:article_id/comments", () => {
       });
   });
 });
+
+// task 7
+
+describe("POST - /api/articles/:article_id/comments", () => {
+  it("201 - should post a comment to the articles table for given article id ", () => {
+    const newComment = {
+      username: "butter_bridge",
+      body: "This is a comment",
+    };
+    return request(app)
+      .post("/api/articles/9/comments")
+      .send(newComment)
+      .expect(201)
+      .then((response) => {
+        console.log(response.body);
+        expect(response.body).toBeInstanceOf(Object);
+      });
+  });
+});
+
+// check id on 201 test
+// will need a 400 when article id is not a number
+// will need a 404 when id is not in database
+// need test 400 when username or body is missing in object or if empty object
+// 404 - when username doesnt exists ie string but no user.
+// check psql error

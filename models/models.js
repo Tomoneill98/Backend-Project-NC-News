@@ -53,3 +53,19 @@ exports.fetchCommentsById = (article_id) => {
       });
   });
 };
+
+// task 7
+exports.insertComment = (newComment, article_id) => {
+  console.log("in model");
+  console.log(newComment);
+  const { username, body } = newComment;
+  return connection
+    .query(
+      `INSERT INTO comments (author, body, article_id) VALUES ($1, $2, $3) RETURNING *; `,
+      [username, body, article_id]
+    )
+    .then((result) => {
+      console.log(result.rows[0]);
+      return result.rows[0];
+    });
+};
