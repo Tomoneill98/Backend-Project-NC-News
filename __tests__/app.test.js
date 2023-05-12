@@ -293,4 +293,28 @@ describe("7. error handling - POST ", () => {
         expect(res.body.msg).toBe("Error - Not Found");
       });
   });
+  it("200 - ignore unneccessary properties", () => {
+    const newComment = {
+      username: "butter_bridge",
+      body: "This is a comment",
+      favColour: "blue",
+    };
+    return request(app)
+      .post("/api/articles/9/comments")
+      .send(newComment)
+      .expect(201)
+      .then((response) => {
+        expect(response.body).toBeInstanceOf(Object);
+        expect(response.body.comment).toEqual(
+          expect.objectContaining({
+            comment_id: expect.any(Number),
+            article_id: expect.any(Number),
+            author: expect.any(String),
+            body: expect.any(String),
+            created_at: expect.any(String),
+            votes: expect.any(Number),
+          })
+        );
+      });
+  });
 });
