@@ -59,12 +59,13 @@ exports.getCommentsById = (req, res, next) => {
 
 exports.postComment = (req, res, next) => {
   const newComment = req.body;
-  console.log(newComment);
   const { article_id } = req.params;
-  console.log(article_id);
-  console.log("in controller");
-  insertComment(newComment, article_id).then((comment) => {
-    console.log(comment);
-    res.status(201).send({ comment });
-  });
+  insertComment(newComment, article_id)
+    .then((comment) => {
+      res.status(201).send({ comment });
+    })
+    .catch((err) => {
+      console.log(err);
+      next(err);
+    });
 };

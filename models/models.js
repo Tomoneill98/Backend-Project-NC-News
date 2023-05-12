@@ -56,16 +56,28 @@ exports.fetchCommentsById = (article_id) => {
 
 // task 7
 exports.insertComment = (newComment, article_id) => {
-  console.log("in model");
-  console.log(newComment);
   const { username, body } = newComment;
+  if (!username || !body) {
+    return Promise.reject({
+      status: 400,
+      msg: "Error - please enter username or comment",
+    });
+  }
   return connection
     .query(
       `INSERT INTO comments (author, body, article_id) VALUES ($1, $2, $3) RETURNING *; `,
       [username, body, article_id]
     )
     .then((result) => {
-      console.log(result.rows[0]);
+      if (result.rows.length === 0) {
+        return Promise.reject({
+          status: 404,
+          msg: "Error - invalid article ID",
+        });
+      }
+      console.log(result.rows);
       return result.rows[0];
     });
 };
+
+// promise.rejects

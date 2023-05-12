@@ -80,7 +80,7 @@ describe("GET - /api/articles/invalidArticleId", () => {
       .get("/api/articles/invalidArticleId")
       .expect(400)
       .then((response) => {
-        expect(response.body).toEqual({ msg: "Error - Invalid ID" });
+        expect(response.body).toEqual({ msg: "Error - Bad Request" });
       });
   });
   it("404 - responds with error message when id not found", () => {
@@ -201,7 +201,7 @@ describe("Error handling - /api/articles/:article_id/comments", () => {
       .get("/api/articles/nonsense/comments")
       .expect(400)
       .then((res) => {
-        expect(res.body.msg).toBe("Error - Invalid ID");
+        expect(res.body.msg).toBe("Error - Bad Request");
       });
   });
   it("GET - look for an article with no comments - Returns an empty array", () => {
@@ -227,15 +227,70 @@ describe("POST - /api/articles/:article_id/comments", () => {
       .send(newComment)
       .expect(201)
       .then((response) => {
-        console.log(response.body);
         expect(response.body).toBeInstanceOf(Object);
+        expect(response.body.comment).toEqual(
+          expect.objectContaining({
+            comment_id: expect.any(Number),
+            article_id: expect.any(Number),
+            author: expect.any(String),
+            body: expect.any(String),
+            created_at: expect.any(String),
+            votes: expect.any(Number),
+          })
+        );
       });
   });
 });
 
-// check id on 201 test
-// will need a 400 when article id is not a number
-// will need a 404 when id is not in database
-// need test 400 when username or body is missing in object or if empty object
-// 404 - when username doesnt exists ie string but no user.
-// check psql error
+describe("7. error handling - POST ", () => {
+  it("400 - when article ID is not a number ", () => {
+    const newComment = {
+      username: "butter_bridge",
+      body: "This is a comment",
+    };
+    return request(app)
+      .post("/api/articles/nonsense/comments")
+      .send(newComment)
+      .expect(400)
+      .then((res) => {
+        expect(res.body.msg).toBe("Error - Bad Request");
+      });
+  });
+  it("400 - when username or body is missing ", () => {
+    const newComment = {};
+    return request(app)
+      .post("/api/articles/9/comments")
+      .send(newComment)
+      .expect(400)
+      .then((res) => {
+        expect(res.body.msg).toBe("Error - please enter username or comment");
+      });
+  });
+  it("404 - when username doesnt exist ", () => {
+    const newComment = {
+      username: "emily hassle",
+      body: "This is a comment",
+    };
+    return request(app)
+      .post("/api/articles/9/comments")
+      .send(newComment)
+      .expect(404)
+      .then((res) => {
+        expect(res.body.msg).toBe("Error - Not Found");
+      });
+  });
+  it("404 - when article id is not in database ", () => {
+    const newComment = {
+      username: "butter_bridge",
+      body: "This is a comment",
+    };
+    return request(app)
+      .post("/api/articles/100000/comments")
+      .send(newComment)
+      .expect(404)
+      .then((res) => {
+        console.log(res);
+        expect(res.body.msg).toBe("Error - Not Found");
+      });
+  });
+});
