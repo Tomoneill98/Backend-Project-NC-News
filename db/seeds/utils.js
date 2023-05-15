@@ -35,3 +35,13 @@ exports.checkCommentsExists = (article_id) => {
       }
     });
 };
+
+exports.checkArticleExists = (article) => {
+  return connection
+    .query(`SELECT * FROM articles WHERE article_id = $1;`, [article])
+    .then((res) => {
+      if (res.rows.length === 0) {
+        return Promise.reject({ status: 404, msg: "Article not found!" });
+      }
+    });
+};

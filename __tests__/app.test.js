@@ -289,7 +289,6 @@ describe("7. error handling - POST ", () => {
       .send(newComment)
       .expect(404)
       .then((res) => {
-        console.log(res);
         expect(res.body.msg).toBe("Error - Not Found");
       });
   });
@@ -317,4 +316,52 @@ describe("7. error handling - POST ", () => {
         );
       });
   });
+});
+
+describe("PATCH /api/articles/:article_id", () => {
+  it("PATCH - status 200 - returns status code 200 with updated object", () => {
+    return request(app)
+      .patch("/api/articles/1")
+      .send({ inc_votes: 1 })
+      .expect(200)
+      .then((res) => {
+        expect(res.body.updatedArticle.votes).toBe(101);
+      });
+  });
+  // it("Patch method works with larger number", () => {
+  //   return request(app)
+  //     .patch("/api/articles/1")
+  //     .send({ inc_votes: 300 })
+  //     .expect(200)
+  //     .then((res) => {
+  //       expect(res.body.updatedArticle.votes).toBe(400);
+  //     });
+  // });
+  // it("Returns status 404 with error msg if article does not exist", () => {
+  //   return request(app)
+  //     .patch("/api/articles/9999")
+  //     .send({ inc_votes: 1 })
+  //     .expect(404)
+  //     .then((res) => {
+  //       expect(res.body.msg).toBe("Article not found!");
+  //     });
+  // });
+  // it("Returns status 400 & error message if article_id input is not number", () => {
+  //   return request(app)
+  //     .patch("/api/articles/hello")
+  //     .send({ inc_votes: 1 })
+  //     .expect(400)
+  //     .then((res) => {
+  //       expect(res.body.msg).toBe("Invalid input");
+  //     });
+  // });
+  // it("Returns status 400 & error message if inc_votes value is not a number", () => {
+  //   return request(app)
+  //     .patch("/api/articles/1")
+  //     .send({ inc_votes: "incorrect data type" })
+  //     .expect(400)
+  //     .then((res) => {
+  //       expect(res.body.msg).toBe("Incorrect data type");
+  //     });
+  // });
 });

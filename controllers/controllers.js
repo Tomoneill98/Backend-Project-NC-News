@@ -6,6 +6,7 @@ const {
   fetchArticles,
   fetchArticlesById,
   insertComment,
+  patchVotesById,
 } = require("../models/models");
 
 exports.getTopics = (req, res) => {
@@ -65,7 +66,25 @@ exports.postComment = (req, res, next) => {
       res.status(201).send({ comment });
     })
     .catch((err) => {
-      console.log(err);
+      next(err);
+    });
+};
+
+// task 8
+
+exports.patchVotes = (req, res, next) => {
+  console.log("in controller");
+  const { article_id } = req.params;
+  console.log(req.params);
+  const { inc_votes } = req.body;
+  console.log(req.body);
+
+  patchVotesById(article_id, inc_votes)
+    .then((updatedArticle) => {
+      res.status(200).send({ updatedArticle });
+      console.log(result);
+    })
+    .catch((err) => {
       next(err);
     });
 };

@@ -8,6 +8,7 @@ const {
   getArticles,
   getArticlesById,
   postComment,
+  patchVotes,
 } = require("./controllers/controllers");
 
 app.use(express.json());
@@ -18,6 +19,8 @@ app.get("/api/articles", getArticles);
 app.get("/api/articles/:article_id", getArticlesById);
 app.get("/api/articles/:article_id/comments", getCommentsById);
 app.post("/api/articles/:article_id/comments", postComment);
+app.patch("/api/articles/:article_id", patchVotes);
+console.log("app all good");
 
 app.all("*", (req, res) => {
   res.status(404).send({ msg: "Error - invalid endpoint" });
@@ -29,6 +32,9 @@ app.use((err, req, res, next) => {
   }
   if (err.code === "23503") {
     res.status(404).send({ msg: "Error - Not Found" });
+  }
+  if (err.code === "23502") {
+    res.status(404).send({ msg: "Missing required info" });
   } else if (err.status && err.msg) {
     res.status(err.status).send({ msg: err.msg });
   } else res.status(500).send({ msg: "Internal Server Error" });
