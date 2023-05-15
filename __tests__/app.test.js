@@ -80,7 +80,9 @@ describe("GET - /api/articles/invalidArticleId", () => {
       .get("/api/articles/invalidArticleId")
       .expect(400)
       .then((response) => {
-        expect(response.body).toEqual({ msg: "Error - Bad Request" });
+        expect(response.body).toEqual({
+          msg: "Error - Please check endpoint and try again",
+        });
       });
   });
   it("404 - responds with error message when id not found", () => {
@@ -201,7 +203,9 @@ describe("Error handling - /api/articles/:article_id/comments", () => {
       .get("/api/articles/nonsense/comments")
       .expect(400)
       .then((res) => {
-        expect(res.body.msg).toBe("Error - Bad Request");
+        expect(res.body.msg).toBe(
+          "Error - Please check endpoint and try again"
+        );
       });
   });
   it("GET - look for an article with no comments - Returns an empty array", () => {
@@ -253,7 +257,9 @@ describe("7. error handling - POST ", () => {
       .send(newComment)
       .expect(400)
       .then((res) => {
-        expect(res.body.msg).toBe("Error - Bad Request");
+        expect(res.body.msg).toBe(
+          "Error - Please check endpoint and try again"
+        );
       });
   });
   it("400 - when username or body is missing ", () => {
@@ -318,50 +324,53 @@ describe("7. error handling - POST ", () => {
   });
 });
 
-describe("PATCH /api/articles/:article_id", () => {
-  it("PATCH - status 200 - returns status code 200 with updated object", () => {
+// PATCH Tests //
+describe("/api/articles/:article_id", () => {
+  test("PATCH - status: 200 - returns status code 200 and updated object", () => {
     return request(app)
       .patch("/api/articles/1")
       .send({ inc_votes: 1 })
       .expect(200)
-      .then((res) => {
-        expect(res.body.updatedArticle.votes).toBe(101);
+      .then((response) => {
+        expect(response.body.updatedArticle.votes).toBe(101);
       });
   });
-  // it("Patch method works with larger number", () => {
-  //   return request(app)
-  //     .patch("/api/articles/1")
-  //     .send({ inc_votes: 300 })
-  //     .expect(200)
-  //     .then((res) => {
-  //       expect(res.body.updatedArticle.votes).toBe(400);
-  //     });
-  // });
-  // it("Returns status 404 with error msg if article does not exist", () => {
-  //   return request(app)
-  //     .patch("/api/articles/9999")
-  //     .send({ inc_votes: 1 })
-  //     .expect(404)
-  //     .then((res) => {
-  //       expect(res.body.msg).toBe("Article not found!");
-  //     });
-  // });
-  // it("Returns status 400 & error message if article_id input is not number", () => {
-  //   return request(app)
-  //     .patch("/api/articles/hello")
-  //     .send({ inc_votes: 1 })
-  //     .expect(400)
-  //     .then((res) => {
-  //       expect(res.body.msg).toBe("Invalid input");
-  //     });
-  // });
-  // it("Returns status 400 & error message if inc_votes value is not a number", () => {
-  //   return request(app)
-  //     .patch("/api/articles/1")
-  //     .send({ inc_votes: "incorrect data type" })
-  //     .expect(400)
-  //     .then((res) => {
-  //       expect(res.body.msg).toBe("Incorrect data type");
-  //     });
-  // });
+  test("PATCH - status: 200 - it works with larger integers", () => {
+    return request(app)
+      .patch("/api/articles/1")
+      .send({ inc_votes: 300 })
+      .expect(200)
+      .then((response) => {
+        expect(response.body.updatedArticle.votes).toBe(400);
+      });
+  });
+  test("PATCH - status: 404 - with error message", () => {
+    return request(app)
+      .patch("/api/articles/123456789")
+      .send({ inc_votes: 1 })
+      .expect(404)
+      .then((response) => {
+        expect(response.body.msg).toBe("Article not found!");
+      });
+  });
+  test("PATCH - status: 400 - error message if the article_id is not a number", () => {
+    return request(app)
+      .patch("/api/articles/nonsense")
+      .send({ inc_votes: 1 })
+      .expect(400)
+      .then((response) => {
+        expect(response.body.msg).toBe(
+          "Error - Please check endpoint and try again"
+        );
+      });
+  });
+  test("PATCH - status: 400 - error message if inc_votes is not a number", () => {
+    return request(app)
+      .patch("/api/articles/1")
+      .send({ inc_votes: "Incorrect data type" })
+      .expect(400)
+      .then((response) => {
+        expect(response.body.msg).toBe("Incorrect data type");
+      });
+  });
 });

@@ -73,12 +73,8 @@ exports.postComment = (req, res, next) => {
 // task 8
 
 exports.patchVotes = (req, res, next) => {
-  console.log("in controller");
   const { article_id } = req.params;
-  console.log(req.params);
   const { inc_votes } = req.body;
-  console.log(req.body);
-
   patchVotesById(article_id, inc_votes)
     .then((updatedArticle) => {
       res.status(200).send({ updatedArticle });

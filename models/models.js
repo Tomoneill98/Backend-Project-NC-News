@@ -1,6 +1,9 @@
 const connection = require("../db/connection");
 const fs = require("fs/promises");
-const { checkCommentsExists } = require("../db/seeds/utils");
+const {
+  checkCommentsExists,
+  checkArticleExists,
+} = require("../db/seeds/utils");
 
 exports.fetchTopicsData = () => {
   return connection.query(`SELECT * FROM topics;`).then((result) => {
@@ -98,7 +101,6 @@ exports.insertComment = (newComment, article_id) => {
 //   });
 // };
 exports.patchVotesById = (article_id, inc_votes) => {
-  console.log("in model");
   let selectQuery = `
     UPDATE articles
     SET votes = votes + $1
