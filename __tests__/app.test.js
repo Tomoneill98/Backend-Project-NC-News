@@ -326,7 +326,7 @@ describe("7. error handling - POST ", () => {
 
 // PATCH Tests //
 describe("/api/articles/:article_id", () => {
-  test("PATCH - status: 200 - returns status code 200 and updated object", () => {
+  it("PATCH - status: 200 - returns status code 200 and updated object", () => {
     return request(app)
       .patch("/api/articles/1")
       .send({ inc_votes: 1 })
@@ -335,7 +335,7 @@ describe("/api/articles/:article_id", () => {
         expect(response.body.updatedArticle.votes).toBe(101);
       });
   });
-  test("PATCH - status: 200 - it works with larger integers", () => {
+  it("PATCH - status: 200 - it works with larger integers", () => {
     return request(app)
       .patch("/api/articles/1")
       .send({ inc_votes: 300 })
@@ -344,7 +344,7 @@ describe("/api/articles/:article_id", () => {
         expect(response.body.updatedArticle.votes).toBe(400);
       });
   });
-  test("PATCH - status: 404 - with error message", () => {
+  it("PATCH - status: 404 - with error message", () => {
     return request(app)
       .patch("/api/articles/123456789")
       .send({ inc_votes: 1 })
@@ -353,7 +353,7 @@ describe("/api/articles/:article_id", () => {
         expect(response.body.msg).toBe("Article not found!");
       });
   });
-  test("PATCH - status: 400 - error message if the article_id is not a number", () => {
+  it("PATCH - status: 400 - error message if the article_id is not a number", () => {
     return request(app)
       .patch("/api/articles/nonsense")
       .send({ inc_votes: 1 })
@@ -364,7 +364,7 @@ describe("/api/articles/:article_id", () => {
         );
       });
   });
-  test("PATCH - status: 400 - error message if inc_votes is not a number", () => {
+  it("PATCH - status: 400 - error message if inc_votes is not a number", () => {
     return request(app)
       .patch("/api/articles/1")
       .send({ inc_votes: "Incorrect data type" })

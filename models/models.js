@@ -82,24 +82,6 @@ exports.insertComment = (newComment, article_id) => {
     });
 };
 
-// task 8
-// exports.patchVotesById = (article_id, inc_votes) => {
-//   console.log("in model");
-//   let selectQuer = `
-//   UPDATE articles
-//   SET votes = votes + $1
-//   WHERE article_id = $2
-//   RETURNING *;
-//   `;
-//   if (typeof inc_votes !== "number") {
-//     return Promise.reject({ status: 400, msg: "Incorrect data type" });
-//   }
-//   return checkArticleExists(article_id).then(() => {
-//     return connection.query(selectQuer, [inc_votes, article_id]).then((res) => {
-//       return res.rows[0];
-//     });
-//   });
-// };
 exports.patchVotesById = (article_id, inc_votes) => {
   let selectQuery = `
     UPDATE articles
