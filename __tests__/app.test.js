@@ -25,7 +25,6 @@ describe("GET - Status: 200 - Responds with an array of topic objects with slug 
           expect(topic).toHaveProperty("description");
           expect(topic).toHaveProperty("slug");
         });
-
         expect(Array.isArray(response.body.topics)).toEqual(true);
         // .objectContaining - allow object to be extended with extra props
         // .toMatchObject
@@ -397,6 +396,37 @@ describe("/api/comments/:comment_id", () => {
       .expect(404)
       .then((response) => {
         expect(response.body.msg).toBe("Error - comment doesn't exist");
+      });
+  });
+});
+
+// Get users
+
+describe("/api/users", () => {
+  it("GET - status: 200 - returns status 200 and an array of user objects ", () => {
+    return request(app)
+      .get("/api/users")
+      .expect(200)
+      .then((response) => {
+        expect(response.body.users.length).toBe(4);
+        expect(Array.isArray(response.body.users)).toBe(true);
+        response.body.users.forEach((user) => {
+          expect(user).toEqual(
+            expect.objectContaining({
+              username: expect.any(String),
+              name: expect.any(String),
+              avatar_url: expect.any(String),
+            })
+          );
+        });
+      });
+  });
+  it("Responds with an error message when passed a non existent path", () => {
+    return request(app)
+      .get("/api/nothing")
+      .expect(404)
+      .then((response) => {
+        expect(response.body.msg).toBe("Error - invalid endpoint");
       });
   });
 });

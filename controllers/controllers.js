@@ -7,9 +7,10 @@ const {
   insertComment,
   patchVotesById,
   deleteCommentsById,
+  fetchUsersData,
 } = require("../models/models");
 
-exports.getTopics = (req, res) => {
+exports.getTopics = (req, res, next) => {
   fetchTopicsData()
     .then((topics) => {
       res.status(200).send({ topics });
@@ -87,12 +88,22 @@ exports.patchVotes = (req, res, next) => {
 // task 9
 
 exports.deleteComments = (req, res, next) => {
-  console.log("in controller");
   const { comment_id } = req.params;
-  console.log(req.params);
   deleteCommentsById(comment_id)
     .then(() => {
       res.sendStatus(204);
+    })
+    .catch((err) => {
+      next(err);
+    });
+};
+
+// task 10
+
+exports.getUsers = (req, res, next) => {
+  fetchUsersData()
+    .then((users) => {
+      res.status(200).send({ users });
     })
     .catch((err) => {
       next(err);
