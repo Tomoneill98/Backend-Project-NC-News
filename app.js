@@ -9,6 +9,7 @@ const {
   getArticlesById,
   postComment,
   patchVotes,
+  deleteComments,
 } = require("./controllers/controllers");
 
 app.use(express.json());
@@ -20,6 +21,8 @@ app.get("/api/articles/:article_id", getArticlesById);
 app.get("/api/articles/:article_id/comments", getCommentsById);
 app.post("/api/articles/:article_id/comments", postComment);
 app.patch("/api/articles/:article_id", patchVotes);
+app.delete("/api/comments/:comment_id", deleteComments);
+console.log("in app");
 
 app.all("*", (req, res) => {
   res.status(404).send({ msg: "Error - invalid endpoint" });

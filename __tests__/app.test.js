@@ -324,7 +324,7 @@ describe("7. error handling - POST ", () => {
   });
 });
 
-// PATCH Tests //
+// PATCH Tests
 describe("/api/articles/:article_id", () => {
   it("PATCH - status: 200 - returns status code 200 and updated object", () => {
     return request(app)
@@ -344,7 +344,7 @@ describe("/api/articles/:article_id", () => {
         expect(response.body.updatedArticle.votes).toBe(400);
       });
   });
-  it("PATCH - status: 404 - with error message", () => {
+  it("PATCH - status: 404 - with error message if article id doesnt exist", () => {
     return request(app)
       .patch("/api/articles/123456789")
       .send({ inc_votes: 1 })
@@ -371,6 +371,32 @@ describe("/api/articles/:article_id", () => {
       .expect(400)
       .then((response) => {
         expect(response.body.msg).toBe("Incorrect data type");
+      });
+  });
+});
+
+// Delete comments
+
+describe("/api/comments/:comment_id", () => {
+  it("DELETE - status: 204 - returns a status 204 and no content", () => {
+    return request(app).delete("/api/comments/12").expect(204);
+  });
+  it("DELETE - status 400 - error message if comment id is not a number", () => {
+    return request(app)
+      .delete("/api/comments/nonsense")
+      .expect(400)
+      .then((response) => {
+        expect(response.body.msg).toBe(
+          "Error - Please check endpoint and try again"
+        );
+      });
+  });
+  it("DELETE - status 404 - error message if comment id doesnt exist", () => {
+    return request(app)
+      .delete("/api/comments/10000000")
+      .expect(404)
+      .then((response) => {
+        expect(response.body.msg).toBe("Error - comment doesn't exist");
       });
   });
 });

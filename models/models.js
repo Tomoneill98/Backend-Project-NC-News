@@ -3,6 +3,7 @@ const fs = require("fs/promises");
 const {
   checkCommentsExists,
   checkArticleExists,
+  checkCommentExists,
 } = require("../db/seeds/utils");
 
 exports.fetchTopicsData = () => {
@@ -82,6 +83,7 @@ exports.insertComment = (newComment, article_id) => {
     });
 };
 
+//task 8
 exports.patchVotesById = (article_id, inc_votes) => {
   let selectQuery = `
     UPDATE articles
@@ -104,4 +106,16 @@ exports.patchVotesById = (article_id, inc_votes) => {
       }
       return res.rows[0];
     });
+};
+
+// task 9
+exports.deleteCommentsById = (comment_id) => {
+  console.log("in model");
+  return checkCommentExists(comment_id).then(() => {
+    return connection
+      .query(`DELETE FROM comments WHERE comment_id = $1 RETURNING *;`, [
+        comment_id,
+      ])
+      .then((res) => {});
+  });
 };

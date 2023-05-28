@@ -1,12 +1,12 @@
 const {
   fetchTopicsData,
   fetchAPIsData,
-  getCommentsById,
   fetchCommentsById,
   fetchArticles,
   fetchArticlesById,
   insertComment,
   patchVotesById,
+  deleteCommentsById,
 } = require("../models/models");
 
 exports.getTopics = (req, res) => {
@@ -78,7 +78,21 @@ exports.patchVotes = (req, res, next) => {
   patchVotesById(article_id, inc_votes)
     .then((updatedArticle) => {
       res.status(200).send({ updatedArticle });
-      console.log(result);
+    })
+    .catch((err) => {
+      next(err);
+    });
+};
+
+// task 9
+
+exports.deleteComments = (req, res, next) => {
+  console.log("in controller");
+  const { comment_id } = req.params;
+  console.log(req.params);
+  deleteCommentsById(comment_id)
+    .then(() => {
+      res.sendStatus(204);
     })
     .catch((err) => {
       next(err);
