@@ -37,13 +37,27 @@ exports.getArticlesById = (req, res, next) => {
     .catch(next);
 };
 
-// task 5
+// // task 5
+// exports.getArticles = (req, res, next) => {
+//   const { topic, sort_by, order } = req.query;
+//   fetchArticles(topic, sort_by, order)
+//     .then((articles) => {
+//       res.status(200).send({ articles });
+//     })
+//     .catch(next);
+// };
+
 exports.getArticles = (req, res, next) => {
-  fetchArticles()
-    .then((articles) => {
-      res.status(200).send({ articles });
+  const topicQuery = req.query.topic;
+  const sort_by = req.query.sort_by || "created_at";
+  const order = req.query.order || "desc";
+  fetchArticles(sort_by, order, topicQuery)
+    .then((result) => {
+      res.status(200).send({ articles: result });
     })
-    .catch(next);
+    .catch((err) => {
+      next(err);
+    });
 };
 
 // task 6
@@ -109,3 +123,19 @@ exports.getUsers = (req, res, next) => {
       next(err);
     });
 };
+
+// // task 11
+
+// exports.getArticlesByQuery = (req, res, next) => {
+//   console.log("in controller");
+//   console.log(req.query);
+//   const { topic } = req.query;
+//   console.log(topic);
+//   fetchArticlesByQuery(topic)
+//     .then((articles) => {
+//       res.status(200).send({ articles });
+//     })
+//     .catch((err) => {
+//       next(err);
+//     });
+// };

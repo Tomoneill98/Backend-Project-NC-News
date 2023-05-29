@@ -102,7 +102,6 @@ describe("GET - /api/articles", () => {
       .get("/api/articles")
       .expect(200)
       .then((response) => {
-        // expect(response.body.articles[0]).toHaveProperty("author");
         expect(response.body.articles.length).toBe(12);
         response.body.articles.forEach((article) => {
           expect(article).toEqual(
@@ -427,6 +426,58 @@ describe("/api/users", () => {
       .expect(404)
       .then((response) => {
         expect(response.body.msg).toBe("Error - invalid endpoint");
+      });
+  });
+});
+
+// GET articles by query
+
+describe("GET QUERY /api/articles?topic=mitch", () => {
+  test("GET - status 200 - Returns status code 200 and filtered articles array with specified query", () => {
+    return request(app)
+      .get("/api/articles?topic=mitch")
+      .expect(200)
+      .then((res) => {
+        expect(res.body.articles.length).toBe(11);
+        res.body.articles.forEach((article) => {
+          expect(article.topic).toBe("mitch");
+        });
+      });
+  });
+  test("GET - status 404 - Returns status code 404 with error msg if topic not found", () => {
+    return request(app)
+      .get("/api/articles?topic=nonsense")
+      .expect(404)
+      .then((res) => {
+        expect(res.body.msg).toBe("Topic not found");
+      });
+  });
+  test("GET - status 200 - Returns array sorted by sort_by query specified", () => {
+    return request(app)
+      .get("/api/articles?order=desc")
+      .expect(200)
+      .then((res) => {
+        expect(res.body.articles).toBeSortedBy("created_at", {
+          descending: true,
+        });
+      });
+  });
+  test("GET - status 200 - Returns array sorted by sort_by & order query combined", () => {
+    return request(app)
+      .get("/api/articles?sort_by=created_at&order=desc")
+      .expect(200)
+      .then((res) => {
+        expect(res.body.articles).toBeSortedBy("created_at", {
+          descending: true,
+        });
+      });
+  });
+  test("GET - status 200 - Returns empty array when valid query but no results", () => {
+    return request(app)
+      .get("/api/articles?topic=paper")
+      .expect(200)
+      .then((res) => {
+        expect(res.body.articles).toEqual([]);
       });
   });
 });

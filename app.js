@@ -24,7 +24,6 @@ app.post("/api/articles/:article_id/comments", postComment);
 app.patch("/api/articles/:article_id", patchVotes);
 app.delete("/api/comments/:comment_id", deleteComments);
 app.get("/api/users", getUsers);
-console.log("in app");
 
 app.all("*", (req, res) => {
   res.status(404).send({ msg: "Error - invalid endpoint" });
