@@ -1,4 +1,4 @@
-# Backend Project: XOXO News
+# Backend Project: Readdit News
 
 ## Introduction
 This is the backend section of the XOXO News project which was built with a Node-Postgres API created with PSQL, Express, Node.js and Jest. 
