@@ -11,6 +11,7 @@ https://northcoders-news-fsce.onrender.com/api/
 1. Clone the repository
 ```console
 git clone https://github.com/Tomoneill98/Backend-Project-NC-News.git
+```
 
 2. Install dependencies
 ```console
