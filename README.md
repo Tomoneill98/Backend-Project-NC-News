@@ -42,3 +42,35 @@ npm test
 ## Requirements
 - Postgres: 3.3.4
 - Node JS: 0.4.0
+
+## API Endpoints
+
+**GET /api/**
+Responds with a JSON representation of all the available endpoints of the API
+
+**GET /api/topics**
+Serves an array of all topics
+
+**GET /api/articles**
+Retrieves an articles array of article objects
+
+**GET /api/articles/:article_id**
+Retrieves an individual article object with properties of author, article id etc.
+
+**GET /api/articles/:article_id/comments**
+An array of comments for the given article id of which each comment should have properties like votes, author etc.
+
+**POST /api/articles/:article_id/comments**
+Posts a comment to the database
+
+**PATCH /api/articles/:article_id**
+Increments the article's votes property by the inc_votes property in the request body
+
+**DELETE /api/comments/:comment_id**
+Deletes the given comment by comment_id
+
+**GET /api/users**
+Responds with an array of objects with the properties: username, name and avatar_url
+
+**GET /api/articles (queries)**
+The endpoint should accept the queries of topic, sort_by and order
